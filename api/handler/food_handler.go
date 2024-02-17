@@ -18,16 +18,25 @@ func NewFoodHandler(service service.FoodService) *FoodHandler {
 
 func (fh *FoodHandler) Create(ctx *gin.Context) {
 	food := models.Food{}
-	data, err := fh.service.Create(&food)
-	if err != nil {
+	if err := ctx.ShouldBind(&food); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"massage": "Error",
 			"Data":    err,
 		})
 		return
 	}
+	data, err := fh.service.Create(food)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"massage": "Error",
+			"Data":    err.Error(),
+			"err":     "data",
+		})
+		return
+	}
 	ctx.JSON(http.StatusOK, gin.H{
-		"massage": "Error",
+		"massage": "Status Ok",
 		"Data":    data,
 	})
 }
