@@ -1,8 +1,8 @@
 package models
 
 type Food struct {
-	ID       int
-	Name     string
-	Category Category
-	Price    string
+	ID       int    `json:"id"`
+	Name     string `json:"nama"`
+	Category string `json:"category"`
+	Price    string `json:"price"`
 }
