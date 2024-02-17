@@ -16,7 +16,7 @@ func Api(r *gin.Engine, db *sql.DB) {
 
 	food := r.Group("food")
 	{
-		food.GET("/", handl.Create)
+		food.POST("/", handl.Create)
 		// fmt.Println(food.GET("/", handl.Create))
 	}
 }
