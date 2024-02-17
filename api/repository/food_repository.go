@@ -2,13 +2,12 @@ package repository
 
 import (
 	"database/sql"
-	"fmt"
 	"food-api/models"
 )
 
 type FoodRepository interface {
 	GetAll()
-	Create(food *models.Food) (*models.Food, error)
+	Create(food models.Food) (*models.Food, error)
 	Delete()
 	Update()
 	GetById()
@@ -23,14 +22,13 @@ func NewFoodRepository(db *sql.DB) FoodRepository {
 }
 
 // Create implements FoodRepository.
-func (fr *FoodRepositoryImpl) Create(food *models.Food) (*models.Food, error) {
-	_, err := fr.db.Exec("INSERT INTO foods(name,category,price)VALUES($1,$2,$3)", food.Name, food.Category, food.Price)
+func (fr *FoodRepositoryImpl) Create(food models.Food) (*models.Food, error) {
+	_, err := fr.db.Exec("INSERT INTO foods(name, category, price) VALUES($1, $2, $3)", food.Name, food.Category, food.Price)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(err)
 
-	return food, nil
+	return &food, nil
 }
 
 // Delete implements FoodRepository.
