@@ -7,7 +7,7 @@ import (
 
 type FoodService interface {
 	GetAll()
-	Create(food *models.Food) (*models.Food, error)
+	Create(food models.Food) (*models.Food, error)
 	Delete()
 	Update()
 	GetById()
@@ -18,14 +18,12 @@ type FoodServiceImpl struct {
 }
 
 // Create implements FoodService.
-func (fs *FoodServiceImpl) Create(food *models.Food) (*models.Food, error) {
+func (fs *FoodServiceImpl) Create(food models.Food) (*models.Food, error) {
 	result, err := fs.repo.Create(food)
 	if err != nil {
 		return nil, err
 	}
-
 	return result, nil
-
 }
 
 // Delete implements FoodService.
