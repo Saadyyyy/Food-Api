@@ -11,7 +11,7 @@ func main() {
 
 	r := gin.Default()
 
-	db, _ := config.Connection()
+	db, _ := config.InitializeDatabase()
 
 	router.Api(r, db)
 	r.Run()
