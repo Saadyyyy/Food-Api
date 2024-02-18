@@ -41,13 +41,34 @@ func (fh *FoodHandler) Create(ctx *gin.Context) {
 	})
 }
 
-// Delete implements FoodService.
-func (fh *FoodHandler) Delete() {
-	panic("unimplemented")
+// GetAll implements FoodService.
+func (fh *FoodHandler) GetAll(ctx *gin.Context) {
+	food := []models.Food{}
+	if err := ctx.ShouldBind(&food); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"massage": "Error",
+			"Data":    err,
+		})
+		return
+	}
+	data, err := fh.service.GetAll()
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"massage": "Error",
+			"Data":    err.Error(),
+			"err":     "data",
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"massage": "Status Ok",
+		"Data":    data,
+	})
 }
 
-// GetAll implements FoodService.
-func (fh *FoodHandler) GetAll() {
+// Delete implements FoodService.
+func (fh *FoodHandler) Delete() {
 	panic("unimplemented")
 }
 
