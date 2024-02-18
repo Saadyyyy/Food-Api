@@ -6,7 +6,7 @@ import (
 )
 
 type FoodRepository interface {
-	GetAll()
+	GetAll() ([]*models.Food, error)
 	Create(food models.Food) (*models.Food, error)
 	Delete()
 	Update()
@@ -31,13 +31,32 @@ func (fr *FoodRepositoryImpl) Create(food models.Food) (*models.Food, error) {
 	return &food, nil
 }
 
-// Delete implements FoodRepository.
-func (fr *FoodRepositoryImpl) Delete() {
-	panic("unimplemented")
+// GetAll implements FoodRepository.
+func (fr *FoodRepositoryImpl) GetAll() ([]*models.Food, error) {
+	rows, err := fr.db.Query("SELECT * FROM foods")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var foods []*models.Food
+	for rows.Next() {
+		food := &models.Food{}
+		err := rows.Scan(&food.ID, &food.Name, &food.Category, &food.Price)
+		if err != nil {
+			return nil, err
+		}
+		foods = append(foods, food)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return foods, nil
 }
 
-// GetAll implements FoodRepository.
-func (fr *FoodRepositoryImpl) GetAll() {
+// Delete implements FoodRepository.
+func (fr *FoodRepositoryImpl) Delete() {
 	panic("unimplemented")
 }
 
