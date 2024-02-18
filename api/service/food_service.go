@@ -6,7 +6,7 @@ import (
 )
 
 type FoodService interface {
-	GetAll()
+	GetAll() ([]*models.Food, error)
 	Create(food models.Food) (*models.Food, error)
 	Delete()
 	Update()
@@ -26,13 +26,18 @@ func (fs *FoodServiceImpl) Create(food models.Food) (*models.Food, error) {
 	return result, nil
 }
 
-// Delete implements FoodService.
-func (fs *FoodServiceImpl) Delete() {
-	panic("unimplemented")
+// GetAll implements FoodService.
+func (fs *FoodServiceImpl) GetAll() ([]*models.Food, error) {
+	result, err := fs.repo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+
 }
 
-// GetAll implements FoodService.
-func (fs *FoodServiceImpl) GetAll() {
+// Delete implements FoodService.
+func (fs *FoodServiceImpl) Delete() {
 	panic("unimplemented")
 }
 
