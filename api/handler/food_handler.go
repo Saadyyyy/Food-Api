@@ -4,6 +4,7 @@ import (
 	"food-api/api/service"
 	"food-api/models"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +19,7 @@ func NewFoodHandler(service service.FoodService) *FoodHandler {
 
 func (fh *FoodHandler) Create(ctx *gin.Context) {
 	food := models.Food{}
-	if err := ctx.ShouldBind(&food); err != nil {
+	if err := ctx.ShouldBind(&food.ID); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"massage": "Error",
 			"Data":    err,
@@ -68,8 +69,29 @@ func (fh *FoodHandler) GetAll(ctx *gin.Context) {
 }
 
 // Delete implements FoodService.
-func (fh *FoodHandler) Delete() {
-	panic("unimplemented")
+func (fh *FoodHandler) Delete(ctx *gin.Context) {
+	idStr := ctx.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid ID",
+			"error":   err.Error(),
+		})
+		return
+	}
+	data, err := fh.service.Delete(id)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"massage": "status internal server error",
+			"Data":    err,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"massage": "status oke",
+		"data":    data,
+	})
+
 }
 
 // GetById implements FoodService.
