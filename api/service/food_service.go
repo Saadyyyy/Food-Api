@@ -8,7 +8,7 @@ import (
 type FoodService interface {
 	GetAll() ([]*models.Food, error)
 	Create(food models.Food) (*models.Food, error)
-	Delete()
+	Delete(id int) (*models.Food, error)
 	Update()
 	GetById()
 }
@@ -37,8 +37,12 @@ func (fs *FoodServiceImpl) GetAll() ([]*models.Food, error) {
 }
 
 // Delete implements FoodService.
-func (fs *FoodServiceImpl) Delete() {
-	panic("unimplemented")
+func (fs *FoodServiceImpl) Delete(id int) (*models.Food, error) {
+	result, err := fs.repo.Delete(id)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
 // GetById implements FoodService.
