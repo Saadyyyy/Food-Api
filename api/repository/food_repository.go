@@ -8,7 +8,7 @@ import (
 type FoodRepository interface {
 	GetAll() ([]*models.Food, error)
 	Create(food models.Food) (*models.Food, error)
-	Delete()
+	Delete(id int) (*models.Food, error)
 	Update()
 	GetById()
 }
@@ -56,8 +56,13 @@ func (fr *FoodRepositoryImpl) GetAll() ([]*models.Food, error) {
 }
 
 // Delete implements FoodRepository.
-func (fr *FoodRepositoryImpl) Delete() {
-	panic("unimplemented")
+func (fr *FoodRepositoryImpl) Delete(id int) (*models.Food, error) {
+	food := models.Food{}
+	_, err := fr.db.Exec("DELETE FROM foods WHERE id = $1", id)
+	if err != nil {
+		return nil, err
+	}
+	return &food, nil
 }
 
 // GetById implements FoodRepository.
