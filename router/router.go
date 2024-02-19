@@ -18,5 +18,6 @@ func Api(r *gin.Engine, db *sql.DB) {
 	{
 		food.POST("/", handl.Create)
 		food.GET("/", handl.GetAll)
+		food.DELETE("/:id", handl.Delete)
 	}
 }
